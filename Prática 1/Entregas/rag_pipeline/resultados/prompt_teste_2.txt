@@ -1,0 +1,86 @@
+# Pergunta: Posso devolver carga perigosa?
+
+<system_prompt>
+Você é o Assistente NovaTech, uma ferramenta de apoio ao time de atendimento ao cliente da NovaTech, empresa de logística.
+
+REGRAS INVIOLÁVEIS:
+1. Toda informação na resposta DEVE citar a fonte no formato [CÓDIGO-DOC, Seção X.X].
+2. NUNCA invente prazos, valores, percentuais ou regras que não estejam nos chunks fornecidos.
+3. Quando não encontrar informação suficiente, diga explicitamente e sugira escalar para o supervisor.
+4. Responda em português formal mas acessível. Seja direto — o atendente está em chamado.
+
+HIERARQUIA DE FONTES (da mais alta para a mais baixa):
+1. Documentos normativos vigentes (POL-001, SLA-2024)
+2. Procedimentos operacionais — versão mais recente (PROC-042-v2)
+3. Procedimentos operacionais — versões anteriores (PROC-042 v1) — apenas quando aplicável por disposição transitória
+4. FAQ de atendimento — fonte informal, NÃO validada. Usar apenas como complemento.
+
+CONFLITO PROC-042 v1 vs v2:
+- Para chamados novos (a partir de 01/12/2023): usar PROC-042-v2.
+- Para chamados abertos antes de 01/12/2023: usar PROC-042 v1.
+- Quando ambas aparecerem: informar que existem duas versões e indicar qual se aplica.
+
+FORMATO DE RESPOSTA:
+[Resposta direta — máximo 2-3 frases]
+**Detalhes:** [Informações complementares em tópicos, se necessário]
+**Fonte(s):** [CÓDIGO-DOC, Seção X.X]
+⚠️ [Alertas ou ressalvas, se aplicável]
+</system_prompt>
+
+<contexto_recuperado>
+--- Chunk 1 ---
+Fonte: FAQ-atendimento.md | Seção: Item 3 — "Cliente perguntou se pode devolver carga perigosa. O que respondo?" | Documento: FAQ
+Score de similaridade: 0.3917
+
+## Item 3 — "Cliente perguntou se pode devolver carga perigosa. O que respondo?"
+
+Na prática, a gente orienta o cliente a ligar no ramal 4500 (Gestão de Riscos). Oficialmente não pode pelo processo padrão, mas já tiveram casos em que o pessoal de Riscos autorizou exceção. Então não diga que é impossível — diga que precisa de tratamento especial.
+
+---
+
+--- Chunk 2 ---
+Fonte: FAQ-atendimento.md | Seção: Item 22 — "Cliente quer saber sobre seguro de carga. O que falar?" | Documento: FAQ
+Score de similaridade: 0.4275
+
+## Item 22 — "Cliente quer saber sobre seguro de carga. O que falar?"
+
+A NovaTech oferece seguro de carga como adicional. O valor é 0,3% do valor declarado da mercadoria para cargas padrão e 0,8% para cargas perigosas. Detalhe: isso vale para contratos a partir de 2023. Contratos mais antigos podem ter percentuais diferentes — confirme com o Comercial.
+
+---
+
+--- Chunk 3 ---
+Fonte: FAQ-atendimento.md | Seção: Item 38 — "Cliente quer saber a política para carga que chegou danificada." | Documento: FAQ
+Score de similaridade: 0.4540
+
+## Item 38 — "Cliente quer saber a política para carga que chegou danificada."
+
+Carga danificada em trânsito tem processo diferente de devolução. O cliente precisa registrar a ocorrência em até 48h após o recebimento, com fotos e laudo se possível. A NovaTech investiga e, se comprovada responsabilidade nossa, reembolsa integralmente. Mas isso passa pelo Jurídico, não pelo atendimento normal — encaminhe para o e-mail sinistros@novatech.com.br.
+
+---
+
+--- Chunk 4 ---
+Fonte: FAQ-atendimento.md | Seção: Item 32 — "Pode enviar carga perigosa com frete expresso?" | Documento: FAQ
+Score de similaridade: 0.4824
+
+## Item 32 — "Pode enviar carga perigosa com frete expresso?"
+
+Sim, mas precisa de autorização do Compliance e a documentação ANTT tem que estar atualizada. Na prática, demora uns 2 dias para conseguir a autorização, então o 'expresso' acaba não sendo tão expresso. Avise o cliente sobre isso.
+
+---
+
+--- Chunk 5 ---
+Fonte: PROC-042-frete-especial-v1.md | Seção: 4. Condições especiais | Documento: PROC-042
+Score de similaridade: 0.4917
+
+## 4. Condições especiais
+
+- Cargas acima de 5.000kg requerem aprovação prévia do gerente de operações regional.
+- Cargas perigosas com peso acima de 500kg seguem tabela específica (PROC-043: Frete de Cargas Perigosas).
+- Descontos de volume (mais de 10 fretes especiais/mês para o mesmo cliente) devem ser negociados pelo Comercial e registrados em aditivo contratual.
+
+---
+</contexto_recuperado>
+
+<pergunta_do_atendente>
+Posso devolver carga perigosa?
+</pergunta_do_atendente>
