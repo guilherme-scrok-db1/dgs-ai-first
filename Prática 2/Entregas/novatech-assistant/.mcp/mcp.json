@@ -1,0 +1,63 @@
+{
+  "mcpServers": {
+    "filesystem-workspace": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:\\Projetos\\dgs-ai-first\\Prática 2\\Entregas\\novatech-assistant\\src",
+        "C:\\Projetos\\dgs-ai-first\\Prática 2\\Entregas\\novatech-assistant\\specs",
+        "C:\\Projetos\\dgs-ai-first\\Prática 2\\Entregas\\novatech-assistant\\skills"
+      ]
+    },
+    "filesystem-docs-readonly": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:\\Projetos\\dgs-ai-first\\Prática 2\\Entregas\\novatech-assistant\\docs\\novatech"
+      ]
+    },
+    "filesystem-corpus-readonly": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:\\Projetos\\dgs-ai-first\\Prática 2\\Entregas\\novatech-assistant\\data\\retrieval-corpus"
+      ]
+    },
+    "git": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-git"
+      ]
+    },
+    "memory": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "env": {
+        "MEMORY_FILE_PATH": "C:\\Projetos\\dgs-ai-first\\Prática 2\\Entregas\\novatech-assistant\\.mcp\\memory.jsonl"
+      }
+    },
+    "everything": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-everything"
+      ]
+    }
+  }
+}
