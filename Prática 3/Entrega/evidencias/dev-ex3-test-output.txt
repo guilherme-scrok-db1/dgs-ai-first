@@ -1,0 +1,28 @@
+﻿
+> novatech-assistant@0.1.0 test
+> vitest run
+
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90mC:/Projetos/dgs-ai-first/Pr├ítica 2/Entregas/novatech-assistant[39m
+
+{"level":40,"time":1782485172266,"pid":36896,"hostname":"DB1G3492","name":"novatech-assistant.response-validator","reason":"SCHEMA_VALIDATION_FAILED","details":["source_document: Required"],"msg":"model response failed structured output validation"}
+{"level":40,"time":1782485172267,"pid":36896,"hostname":"DB1G3492","name":"novatech-assistant.response-validator","reason":"SCHEMA_VALIDATION_FAILED","msg":"model response rejected by deterministic guardrail"}
+{"level":30,"time":1782485172269,"pid":36896,"hostname":"DB1G3492","name":"novatech-assistant.response-validator","source_document":"POL-001","confidence_score":0.95,"msg":"model response accepted by validator"}
+{"level":40,"time":1782485172269,"pid":36896,"hostname":"DB1G3492","name":"novatech-assistant.response-validator","reason":"DANGEROUS_CARGO_RETURN_GUARDRAIL","msg":"model response rejected by deterministic guardrail"}
+{"level":30,"time":1782485172270,"pid":36896,"hostname":"DB1G3492","name":"novatech-assistant.response-validator","source_document":"POL-001","confidence_score":0.86,"msg":"model response accepted by validator"}
+{"level":30,"time":1782485172270,"pid":36896,"hostname":"DB1G3492","name":"novatech-assistant.response-validator","source_document":"POL-001","confidence_score":0.9,"msg":"model response accepted by validator"}
+{"level":40,"time":1782485172270,"pid":36896,"hostname":"DB1G3492","name":"novatech-assistant.response-validator","reason":"DANGEROUS_CARGO_RETURN_GUARDRAIL","msg":"model response rejected by deterministic guardrail"}
+{"level":40,"time":1782485172271,"pid":36896,"hostname":"DB1G3492","name":"novatech-assistant.response-validator","reason":"SCHEMA_VALIDATION_FAILED","details":[": Unrecognized key(s) in object: 'extra'"],"msg":"model response failed structured output validation"}
+{"level":40,"time":1782485172271,"pid":36896,"hostname":"DB1G3492","name":"novatech-assistant.response-validator","reason":"SCHEMA_VALIDATION_FAILED","msg":"model response rejected by deterministic guardrail"}
+ [32mÔ£ô[39m tests/unit/response-validator.spec.ts [2m([22m[2m7 tests[22m[2m)[22m[90m 8[2mms[22m[39m
+{"level":40,"time":1782485172276,"pid":22508,"hostname":"DB1G3492","name":"novatech-assistant.feedback-endpoint","err":{"type":"Error","message":"invalid json","stack":"Error: invalid json\n    at Object.json (C:\\Projetos\\dgs-ai-first\\Pr├ítica 2\\Entregas\\novatech-assistant\\tests\\unit\\feedback-handler.spec.ts:18:11)\n    at feedbackHandler2 (C:\\Projetos\\dgs-ai-first\\Pr├ítica 2\\Entregas\\novatech-assistant\\src\\functions\\feedback\\handler.ts:75:28)\n    at C:\\Projetos\\dgs-ai-first\\Pr├ítica 2\\Entregas\\novatech-assistant\\tests\\unit\\feedback-handler.spec.ts:16:26\n    at file:///C:/Projetos/dgs-ai-first/Pr%C3%A1tica%202/Entregas/novatech-assistant/node_modules/@vitest/runner/dist/index.js:146:14\n    at file:///C:/Projetos/dgs-ai-first/Pr%C3%A1tica%202/Entregas/novatech-assistant/node_modules/@vitest/runner/dist/index.js:533:11\n    at runWithTimeout (file:///C:/Projetos/dgs-ai-first/Pr%C3%A1tica%202/Entregas/novatech-assistant/node_modules/@vitest/runner/dist/index.js:39:7)\n    at runTest (file:///C:/Projetos/dgs-ai-first/Pr%C3%A1tica%202/Entregas/novatech-assistant/node_modules/@vitest/runner/dist/index.js:1056:17)\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at runSuite (file:///C:/Projetos/dgs-ai-first/Pr%C3%A1tica%202/Entregas/novatech-assistant/node_modules/@vitest/runner/dist/index.js:1205:15)\n    at runSuite (file:///C:/Projetos/dgs-ai-first/Pr%C3%A1tica%202/Entregas/novatech-assistant/node_modules/@vitest/runner/dist/index.js:1205:15)"},"requestId":"req-1","msg":"feedback endpoint received invalid json"}
+{"level":40,"time":1782485172285,"pid":22508,"hostname":"DB1G3492","name":"novatech-assistant.feedback-endpoint","details":["body: Unrecognized key(s) in object: 'attendantEmail'"],"requestId":"req-2","msg":"feedback endpoint rejected invalid request body"}
+{"level":30,"time":1782485172290,"pid":22508,"hostname":"DB1G3492","name":"novatech-assistant.feedback-endpoint","requestId":"req-3","queryId":"q-900","rating":5,"hasComment":true,"msg":"feedback endpoint accepted feedback"}
+ [32mÔ£ô[39m tests/unit/feedback-handler.spec.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 20[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m   Start at [22m 11:45:52
+[2m   Duration [22m 23.62s[2m (transform 97ms, setup 0ms, collect 236ms, tests 28ms, environment 0ms, prepare 247ms)[22m
+
+
