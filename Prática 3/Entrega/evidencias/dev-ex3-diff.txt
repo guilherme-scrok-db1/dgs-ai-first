@@ -1,0 +1,197 @@
+﻿diff --git "a/Pr\303\241tica 2/Entregas/novatech-assistant/src/services/response-validator.ts" "b/Pr\303\241tica 2/Entregas/novatech-assistant/src/services/response-validator.ts"
+index e69de29..65dcb46 100644
+--- "a/Pr\303\241tica 2/Entregas/novatech-assistant/src/services/response-validator.ts"	
++++ "b/Pr\303\241tica 2/Entregas/novatech-assistant/src/services/response-validator.ts"	
+@@ -0,0 +1,191 @@
++import pino, { type Logger } from "pino";
++import { z } from "zod";
++
++const validatorLogger = pino({
++	name: "novatech-assistant.response-validator",
++	level: process.env.LOG_LEVEL ?? "info",
++});
++
++export const structuredOutputSchema = z
++	.object({
++		answer: z.string().trim().min(1),
++		source_document: z.string().trim().min(1),
++		confidence_score: z.number().min(0).max(1),
++	})
++	.strict();
++
++export type StructuredOutput = z.infer<typeof structuredOutputSchema>;
++
++export type ValidationReason =
++	| "SCHEMA_VALIDATION_FAILED"
++	| "MISSING_SOURCE_DOCUMENT"
++	| "DANGEROUS_CARGO_RETURN_GUARDRAIL";
++
++export type ValidationResult = {
++	accepted: boolean;
++	response: StructuredOutput;
++	reason?: ValidationReason;
++};
++
++const SAFE_FALLBACK_RESPONSE: StructuredOutput = {
++	answer:
++		"Nao consigo responder com seguranca agora. Encaminhe a solicitacao para revisao humana.",
++	source_document: "guardrail:fallback",
++	confidence_score: 0,
++};
++
++function normalizeText(input: string): string {
++	return input
++		.normalize("NFD")
++		.replace(/[\u0300-\u036f]/g, "")
++		.replace(/[^a-zA-Z0-9\s]/g, " ")
++		.replace(/\s+/g, " ")
++		.toLowerCase();
++}
++
++function tokenize(input: string): string[] {
++	return normalizeText(input)
++		.split(" ")
++		.filter((token) => token.length > 0);
++}
++
++function mentionsDangerousCargoAndReturn(answer: string): boolean {
++	const normalizedAnswer = normalizeText(answer);
++	const dangerousCargoPatterns = [
++		/\bcarga\s+perigosa\b/,
++		/\bcargas\s+perigosas\b/,
++		/\bmercadoria\s+perigosa\b/,
++		/\bmercadorias\s+perigosas\b/,
++		/\bproduto\s+perigoso\b/,
++		/\bprodutos\s+perigosos\b/,
++	];
++	const returnPatterns = [
++		/\bdevolucao\b/,
++		/\bdevolucoes\b/,
++		/\bdevolver\b/,
++		/\bdevolvida\b/,
++		/\bdevolvidas\b/,
++		/\bdevolvido\b/,
++		/\bdevolvidos\b/,
++	];
++
++	const mentionsDangerousCargo = dangerousCargoPatterns.some((pattern) => pattern.test(normalizedAnswer));
++	const mentionsReturn = returnPatterns.some((pattern) => pattern.test(normalizedAnswer));
++
++	return mentionsDangerousCargo && mentionsReturn;
++}
++
++function hasNegativeStatement(answer: string): boolean {
++	const normalizedAnswer = normalizeText(answer);
++	const tokens = tokenize(answer);
++
++	return (
++		normalizedAnswer.includes("nao pode") ||
++		normalizedAnswer.includes("nao podem") ||
++		normalizedAnswer.includes("nao e possivel") ||
++		normalizedAnswer.includes("nao sao permitidas") ||
++		normalizedAnswer.includes("nao sao permitidos") ||
++		normalizedAnswer.includes("nao permitido") ||
++		normalizedAnswer.includes("nao permitida") ||
++		normalizedAnswer.includes("impossivel") ||
++		normalizedAnswer.includes("proibida") ||
++		normalizedAnswer.includes("proibido") ||
++		normalizedAnswer.includes("vedada") ||
++		normalizedAnswer.includes("vedado") ||
++		tokens.some((token, index) => token === "nao" && tokens[index + 1] === "podem")
++	);
++}
++
++function hasAffirmativeStatement(answer: string): boolean {
++	const tokens = tokenize(answer);
++	const affirmativeTokens = new Set([
++		"pode",
++		"podem",
++		"permitida",
++		"permitido",
++		"permitidas",
++		"permitidos",
++		"autorizada",
++		"autorizado",
++		"autorizadas",
++		"autorizados",
++	]);
++
++	for (let index = 0; index < tokens.length; index += 1) {
++		const token = tokens[index];
++		const previousToken = index > 0 ? tokens[index - 1] : "";
++
++		if (token === "sim") {
++			return true;
++		}
++
++		if (affirmativeTokens.has(token) && previousToken !== "nao") {
++			return true;
++		}
++
++		if (token === "e" && tokens[index + 1] === "possivel" && previousToken !== "nao") {
++			return true;
++		}
++	}
++
++	return false;
++}
++
++function rejectWithReason(reason: ValidationReason, logger: Logger): ValidationResult {
++	logger.warn({ reason }, "model response rejected by deterministic guardrail");
++
++	return {
++		accepted: false,
++		reason,
++		response: SAFE_FALLBACK_RESPONSE,
++	};
++}
++
++export function validateModelResponse(
++	rawResponse: unknown,
++	logger: Logger = validatorLogger,
++): ValidationResult {
++	const parsed = structuredOutputSchema.safeParse(rawResponse);
++
++	if (!parsed.success) {
++		logger.warn(
++			{
++				reason: "SCHEMA_VALIDATION_FAILED",
++				details: parsed.error.issues.map((issue) => `${issue.path.join(".")}: ${issue.message}`),
++			},
++			"model response failed structured output validation",
++		);
++
++		return rejectWithReason("SCHEMA_VALIDATION_FAILED", logger);
++	}
++
++	const candidate = parsed.data;
++
++	if (!candidate.source_document.trim()) {
++		return rejectWithReason("MISSING_SOURCE_DOCUMENT", logger);
++	}
++
++	const topicRequiresNegative = mentionsDangerousCargoAndReturn(candidate.answer);
++
++	if (topicRequiresNegative) {
++		const hasNegative = hasNegativeStatement(candidate.answer);
++		const hasAffirmative = hasAffirmativeStatement(candidate.answer);
++
++		if (!hasNegative || hasAffirmative) {
++			return rejectWithReason("DANGEROUS_CARGO_RETURN_GUARDRAIL", logger);
++		}
++	}
++
++	logger.info(
++		{
++			source_document: candidate.source_document,
++			confidence_score: candidate.confidence_score,
++		},
++		"model response accepted by validator",
++	);
++
++	return {
++		accepted: true,
++		response: candidate,
++	};
++}
+
